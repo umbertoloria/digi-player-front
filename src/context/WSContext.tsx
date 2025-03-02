@@ -1,13 +1,18 @@
-import { createContext, FC, PropsWithChildren, useContext, useState } from 'react'
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from 'react'
 import { connectAndCreateServerComm, ServerComm } from '../remote/client.ts'
 
 const WSContext = createContext<{
-  serverComm: null | ServerComm,
-  tryToConnect: () => void,
+  serverComm: null | ServerComm
+  tryToConnect: () => void
 }>({
   serverComm: null,
-  tryToConnect: () => {
-  },
+  tryToConnect: () => {},
 })
 
 export const WSProvider: FC<PropsWithChildren> = props => {
