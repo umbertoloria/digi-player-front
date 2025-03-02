@@ -37,10 +37,11 @@ const InnerPage: FC = () => {
   }, [])
 
   return (
-    <section className='p-8'>
+    <section className="p-8">
       Home Page
       <br />
       <button
+        className="btn-primary"
         onClick={() => {
           serverComm.play_song()
         }}
@@ -48,6 +49,7 @@ const InnerPage: FC = () => {
         Play song now
       </button>
       <button
+        className="btn-primary"
         onClick={() => {
           serverComm.request_queue_play_state()
         }}
@@ -55,6 +57,7 @@ const InnerPage: FC = () => {
         Get Queue Play State
       </button>
       <button
+        className="btn-primary"
         onClick={() => {
           setOpenPatchEditorDialog(!isOpenPatchEditorDialog)
         }}
@@ -65,13 +68,16 @@ const InnerPage: FC = () => {
           <>Open Volca Drum Patch manager</>
         )}
       </button>
-      <div className='mt-3'>
+      <div className="mt-3">
         {isOpenPatchEditorDialog && (
           <DialogPatchEditor
             onClose={() => {
               setOpenPatchEditorDialog(false)
             }}
             onApply={volca_drum_patch => {
+              // Debug mode.
+              console.log('Applying patch')
+              console.log(volca_drum_patch)
               const yaml_volca_drum_patch = parse_into_yaml(volca_drum_patch)
               if (yaml_volca_drum_patch) {
                 serverComm.apply_volca_drum_patch(yaml_volca_drum_patch)

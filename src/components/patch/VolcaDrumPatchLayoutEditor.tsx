@@ -5,6 +5,7 @@ import {
   YamlPatchLayoutModulationType,
   YamlPatchLayoutSoundSrcType,
 } from '../../lib/volca_drum_patch.ts'
+import classNames from 'classnames'
 
 export const VolcaDrumPatchLayoutEditor: FC<{
   title: string
@@ -12,11 +13,11 @@ export const VolcaDrumPatchLayoutEditor: FC<{
   setLayout: (layout: YamlPatchLayout) => void
 }> = ({ title, layout, setLayout }) => {
   return (
-    <>
+    <div className="border-2 border-gray-500 rounded-md p-2">
       <div>Layout: {title}</div>
       <form>
-        <pre>{JSON.stringify(layout, null, 2)}</pre>
-        <fieldset>
+        {/*<pre>{JSON.stringify(layout, null, 2)}</pre>*/}
+        <div className="flex flex-wrap gap-2">
           <div className="flex flex-wrap gap-2">
             <InputSoundSourceType
               sourceSrcType={layout.sound_src_type}
@@ -46,81 +47,83 @@ export const VolcaDrumPatchLayoutEditor: FC<{
               }}
             />
           </div>
-          <InputLevel
-            label="Level"
-            min={0}
-            max={127}
-            value={layout.level}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                level: newValue,
-              })
-            }}
-          />
-          <InputLevel
-            label="Pitch"
-            min={0}
-            max={127}
-            value={layout.pitch}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                pitch: newValue,
-              })
-            }}
-          />
-          <InputLevel
-            label="Eg Attack"
-            min={0}
-            max={127}
-            value={layout.eg_attack}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                eg_attack: newValue,
-              })
-            }}
-          />
-          <InputLevel
-            label="Eg Release"
-            min={0}
-            max={127}
-            value={layout.eg_release}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                eg_release: newValue,
-              })
-            }}
-          />
-          <InputLevel
-            label="Mod. Amount"
-            min={0}
-            max={127}
-            value={layout.mod_amount}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                mod_amount: newValue,
-              })
-            }}
-          />
-          <InputLevel
-            label="Mod. Rate"
-            min={0}
-            max={127}
-            value={layout.mod_rate}
-            setValue={newValue => {
-              setLayout({
-                ...layout,
-                mod_rate: newValue,
-              })
-            }}
-          />
-        </fieldset>
+          <div className="flex flex-col gap-1">
+            <InputLevel
+              label="Level"
+              min={0}
+              max={127}
+              value={layout.level}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  level: newValue,
+                })
+              }}
+            />
+            <InputLevel
+              label="Pitch"
+              min={0}
+              max={127}
+              value={layout.pitch}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  pitch: newValue,
+                })
+              }}
+            />
+            <InputLevel
+              label="Eg Attack"
+              min={0}
+              max={127}
+              value={layout.eg_attack}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  eg_attack: newValue,
+                })
+              }}
+            />
+            <InputLevel
+              label="Eg Release"
+              min={0}
+              max={127}
+              value={layout.eg_release}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  eg_release: newValue,
+                })
+              }}
+            />
+            <InputLevel
+              label="Mod. Amount"
+              min={0}
+              max={127}
+              value={layout.mod_amount}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  mod_amount: newValue,
+                })
+              }}
+            />
+            <InputLevel
+              label="Mod. Rate"
+              min={0}
+              max={127}
+              value={layout.mod_rate}
+              setValue={newValue => {
+                setLayout({
+                  ...layout,
+                  mod_rate: newValue,
+                })
+              }}
+            />
+          </div>
+        </div>
       </form>
-    </>
+    </div>
   )
 }
 
@@ -131,11 +134,9 @@ const InputSoundSourceType: FC<{
   return (
     <>
       <div>
-        <label>Sound Source Type</label>
+        <label>Sound SRC TYPE</label>
         <div>
           <RadioLabel
-            name="sound_source_type"
-            value="WaveSine"
             label="WaveSine"
             checked={sourceSrcType == 'WaveSine'}
             onChecked={() => {
@@ -143,8 +144,6 @@ const InputSoundSourceType: FC<{
             }}
           />
           <RadioLabel
-            name="sound_source_type"
-            value="WaveSaw"
             label="WaveSaw"
             checked={sourceSrcType == 'WaveSaw'}
             onChecked={() => {
@@ -152,8 +151,6 @@ const InputSoundSourceType: FC<{
             }}
           />
           <RadioLabel
-            name="sound_source_type"
-            value="WaveNoiseHPF"
             label="WaveNoiseHPF"
             checked={sourceSrcType == 'WaveNoiseHPF'}
             onChecked={() => {
@@ -161,8 +158,6 @@ const InputSoundSourceType: FC<{
             }}
           />
           <RadioLabel
-            name="sound_source_type"
-            value="WaveNoiseLPF"
             label="WaveNoiseLPF"
             checked={sourceSrcType == 'WaveNoiseLPF'}
             onChecked={() => {
@@ -170,8 +165,6 @@ const InputSoundSourceType: FC<{
             }}
           />
           <RadioLabel
-            name="sound_source_type"
-            value="WaveNoiseBPF"
             label="WaveNoiseBPF"
             checked={sourceSrcType == 'WaveNoiseBPF'}
             onChecked={() => {
@@ -191,11 +184,9 @@ const InputModulationType: FC<{
   return (
     <>
       <div>
-        <label>Modulation Type</label>
+        <label>MOD. Type</label>
         <div>
           <RadioLabel
-            name="mod_type"
-            value="ModExp"
             label="ModExp"
             checked={modulationType == 'ModExp'}
             onChecked={() => {
@@ -203,8 +194,6 @@ const InputModulationType: FC<{
             }}
           />
           <RadioLabel
-            name="mod_type"
-            value="ModTri"
             label="ModTri"
             checked={modulationType == 'ModTri'}
             onChecked={() => {
@@ -212,8 +201,6 @@ const InputModulationType: FC<{
             }}
           />
           <RadioLabel
-            name="mod_type"
-            value="ModRand"
             label="ModRand"
             checked={modulationType == 'ModRand'}
             onChecked={() => {
@@ -236,8 +223,6 @@ const InputAmpEg: FC<{
         <label>Amp Eg</label>
         <div>
           <RadioLabel
-            name="amp_eg"
-            value="EnvAd"
             label="EnvAd"
             checked={ampEg == 'EnvAd'}
             onChecked={() => {
@@ -245,8 +230,6 @@ const InputAmpEg: FC<{
             }}
           />
           <RadioLabel
-            name="amp_eg"
-            value="EnvExp"
             label="EnvExp"
             checked={ampEg == 'EnvExp'}
             onChecked={() => {
@@ -254,8 +237,6 @@ const InputAmpEg: FC<{
             }}
           />
           <RadioLabel
-            name="amp_eg"
-            value="EnvMul"
             label="EnvMul"
             checked={ampEg == 'EnvMul'}
             onChecked={() => {
@@ -269,30 +250,22 @@ const InputAmpEg: FC<{
 }
 
 const RadioLabel: FC<{
-  name: string
-  value: string
   label: string
   checked: boolean
   onChecked: () => void
-}> = ({ name, value, label, checked, onChecked }) => {
+}> = ({ label, checked, onChecked }) => {
   return (
     <>
-      <div>
-        <label>
-          <input
-            type="radio"
-            name={name}
-            value={value}
-            checked={checked}
-            onChange={event => {
-              const new_value = event.target.value
-              if (new_value === value) {
-                onChecked()
-              }
-            }}
-          />
-          <span>{label}</span>
-        </label>
+      <div
+        className={classNames('cursor-pointer bg-gray-200 px-1', {
+          'bg-gray-400': checked,
+          'hover:bg-gray-300': !checked,
+        })}
+        onClick={() => {
+          onChecked()
+        }}
+      >
+        {label}
       </div>
     </>
   )
@@ -306,8 +279,8 @@ const InputLevel: FC<{
   setValue: (value: number) => void
 }> = ({ label, min, max, value, setValue }) => {
   return (
-    <>
-      <span className="mr-2">{label}</span>
+    <div>
+      <div className="mr-2 w-28 inline-block">{label}</div>
       <input
         type="range"
         min={min}
@@ -319,6 +292,7 @@ const InputLevel: FC<{
           setValue(newValueInt)
         }}
       />
-    </>
+      <div className="ml-2 w-10 text-center inline-block bg-gray-200 rounded">{value}</div>
+    </div>
   )
 }

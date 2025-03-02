@@ -9,9 +9,9 @@ export const VolcaDrumPatchEditor: FC<{
   return (
     <>
       <div>Patch:</div>
-      <div>
+      <div className="flex flex-wrap gap-2">
         <VolcaDrumPatchLayoutEditor
-          title='Kick'
+          title="Kick"
           layout={patch.kick}
           setLayout={layout => {
             setPatch({
@@ -21,7 +21,7 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title='Hi-hat'
+          title="Hi-hat"
           layout={patch.hh}
           setLayout={layout => {
             setPatch({
@@ -31,7 +31,7 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title='Snare'
+          title="Snare"
           layout={patch.snare}
           setLayout={layout => {
             setPatch({
@@ -41,7 +41,7 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title='Sound 4'
+          title="Sound 4"
           layout={patch.sound4}
           setLayout={layout => {
             setPatch({
@@ -51,7 +51,7 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title='Sound 5'
+          title="Sound 5"
           layout={patch.sound5}
           setLayout={layout => {
             setPatch({
@@ -61,7 +61,7 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title='Sound 6'
+          title="Sound 6"
           layout={patch.sound6}
           setLayout={layout => {
             setPatch({
