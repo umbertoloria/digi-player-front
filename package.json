@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.1",
     "classnames": "^2.5.1",
     "js-yaml": "^4.1.0",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@tailwindcss/postcss": "^4.0.9",
     "@types/axios": "^0.9.36",
     "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.0.10",

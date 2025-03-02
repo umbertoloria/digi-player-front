@@ -17,30 +17,104 @@ export const VolcaDrumPatchLayoutEditor: FC<{
       <form>
         <pre>{JSON.stringify(layout, null, 2)}</pre>
         <fieldset>
-          <InputSoundSourceType
-            sourceSrcType={layout.sound_src_type}
-            setSourceSrcType={newValue => {
+          <div className="flex flex-wrap gap-2">
+            <InputSoundSourceType
+              sourceSrcType={layout.sound_src_type}
+              setSourceSrcType={newValue => {
+                setLayout({
+                  ...layout,
+                  sound_src_type: newValue,
+                })
+              }}
+            />
+            <InputModulationType
+              modulationType={layout.mod_type}
+              setModulationType={newValue => {
+                setLayout({
+                  ...layout,
+                  mod_type: newValue,
+                })
+              }}
+            />
+            <InputAmpEg
+              ampEg={layout.amp_eg}
+              setAmpEg={newValue => {
+                setLayout({
+                  ...layout,
+                  amp_eg: newValue,
+                })
+              }}
+            />
+          </div>
+          <InputLevel
+            label="Level"
+            min={0}
+            max={127}
+            value={layout.level}
+            setValue={newValue => {
               setLayout({
                 ...layout,
-                sound_src_type: newValue,
+                level: newValue,
               })
             }}
           />
-          <InputModulationType
-            modulationType={layout.mod_type}
-            setModulationType={newValue => {
+          <InputLevel
+            label="Pitch"
+            min={0}
+            max={127}
+            value={layout.pitch}
+            setValue={newValue => {
               setLayout({
                 ...layout,
-                mod_type: newValue,
+                pitch: newValue,
               })
             }}
           />
-          <InputAmpEg
-            ampEg={layout.amp_eg}
-            setAmpEg={newValue => {
+          <InputLevel
+            label="Eg Attack"
+            min={0}
+            max={127}
+            value={layout.eg_attack}
+            setValue={newValue => {
               setLayout({
                 ...layout,
-                amp_eg: newValue,
+                eg_attack: newValue,
+              })
+            }}
+          />
+          <InputLevel
+            label="Eg Release"
+            min={0}
+            max={127}
+            value={layout.eg_release}
+            setValue={newValue => {
+              setLayout({
+                ...layout,
+                eg_release: newValue,
+              })
+            }}
+          />
+          <InputLevel
+            label="Mod. Amount"
+            min={0}
+            max={127}
+            value={layout.mod_amount}
+            setValue={newValue => {
+              setLayout({
+                ...layout,
+                mod_amount: newValue,
+              })
+            }}
+          />
+          <InputLevel
+            label="Mod. Rate"
+            min={0}
+            max={127}
+            value={layout.mod_rate}
+            setValue={newValue => {
+              setLayout({
+                ...layout,
+                mod_rate: newValue,
               })
             }}
           />
@@ -220,6 +294,31 @@ const RadioLabel: FC<{
           <span>{label}</span>
         </label>
       </div>
+    </>
+  )
+}
+
+const InputLevel: FC<{
+  label: string
+  min: number
+  max: number
+  value: number
+  setValue: (value: number) => void
+}> = ({ label, min, max, value, setValue }) => {
+  return (
+    <>
+      <span className="mr-2">{label}</span>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={event => {
+          const newValue = event.target.value
+          const newValueInt = parseInt(newValue)
+          setValue(newValueInt)
+        }}
+      />
     </>
   )
 }
