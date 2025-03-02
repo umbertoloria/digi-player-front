@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { WSConnectedLayout } from '../layout/WSConnectedLayout.tsx'
 import { useServerCom } from '../context/WSContext.tsx'
 import {
@@ -8,7 +8,7 @@ import {
 } from '../events/event-server-comm.ts'
 import { CustomEventFnType } from '../events/event-builder.ts'
 import { parse_into_yaml } from '../lib/yaml_serializer.ts'
-import { VolcaDrumPatch } from '../lib/volca_drum_patch.ts'
+import { DialogPatchEditor } from '../components/patch/DialogPatchEditor.tsx'
 
 export default function HomePage() {
   return (
@@ -20,6 +20,8 @@ export default function HomePage() {
 
 const InnerPage: FC = () => {
   const { serverComm } = useServerCom()
+
+  const [isOpenPatchEditorDialog, setOpenPatchEditorDialog] = useState(false)
 
   useEffect(() => {
     const listener: CustomEventFnType<
@@ -54,86 +56,32 @@ const InnerPage: FC = () => {
       </button>
       <button
         onClick={() => {
-          // TODO: Create dialog for managing Volca Drum Patches
-          const volce_drum_patch: VolcaDrumPatch = {
-            kick: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-            hh: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-            snare: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-            sound4: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-            sound5: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-            sound6: {
-              sound_src_type: 'WaveSine',
-              mod_type: 'ModTri',
-              amp_eg: 'EnvExp',
-              level: 10,
-              pitch: 10,
-              eg_attack: 10,
-              eg_release: 10,
-              mod_amount: 10,
-              mod_rate: 10,
-            },
-          }
-
-          const yaml_volca_drum_patch = parse_into_yaml(volce_drum_patch)
-          if (yaml_volca_drum_patch) {
-            serverComm.apply_volca_drum_patch(yaml_volca_drum_patch)
-          } else {
-            alert('Unable to parse Volca Drum Patch into YAML')
-          }
+          setOpenPatchEditorDialog(!isOpenPatchEditorDialog)
         }}
       >
-        Apply patch
+        {isOpenPatchEditorDialog ? (
+          <>Close Volca Drum Patch manager</>
+        ) : (
+          <>Open Volca Drum Patch manager</>
+        )}
       </button>
+      <div className='mt-3'>
+        {isOpenPatchEditorDialog && (
+          <DialogPatchEditor
+            onClose={() => {
+              setOpenPatchEditorDialog(false)
+            }}
+            onApply={volca_drum_patch => {
+              const yaml_volca_drum_patch = parse_into_yaml(volca_drum_patch)
+              if (yaml_volca_drum_patch) {
+                serverComm.apply_volca_drum_patch(yaml_volca_drum_patch)
+              } else {
+                alert('Unable to parse Volca Drum Patch into YAML')
+              }
+            }}
+          />
+        )}
+      </div>
     </section>
   )
 }
