@@ -11,9 +11,9 @@ export const VolcaDrumPatchEditor: FC<{
       <div>Patch:</div>
       <div>
         <VolcaDrumPatchLayoutEditor
-          title="Kick"
+          title='Kick'
           layout={patch.kick}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               kick: layout,
@@ -21,9 +21,9 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title="Hi-hat"
+          title='Hi-hat'
           layout={patch.hh}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               hh: layout,
@@ -31,9 +31,9 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title="Snare"
+          title='Snare'
           layout={patch.snare}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               snare: layout,
@@ -41,9 +41,9 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title="Sound 4"
+          title='Sound 4'
           layout={patch.sound4}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               sound4: layout,
@@ -51,9 +51,9 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title="Sound 5"
+          title='Sound 5'
           layout={patch.sound5}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               sound5: layout,
@@ -61,9 +61,9 @@ export const VolcaDrumPatchEditor: FC<{
           }}
         />
         <VolcaDrumPatchLayoutEditor
-          title="Sound 6"
+          title='Sound 6'
           layout={patch.sound6}
-          setLayout={(layout) => {
+          setLayout={layout => {
             setPatch({
               ...patch,
               sound6: layout,

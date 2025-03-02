@@ -21,7 +21,7 @@ export default function HomePage() {
 const InnerPage: FC = () => {
   const { serverComm } = useServerCom()
 
-  const [isOpenPatchEditorDialog, setOpenPatchEditorDialog] = useState(false)
+  const [isOpenPatchEditorDialog, setOpenPatchEditorDialog] = useState(true)
 
   useEffect(() => {
     const listener: CustomEventFnType<
