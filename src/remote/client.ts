@@ -1,3 +1,6 @@
+import { fireNewWebSocketMessage } from '../events/event-server-comm.ts'
+import { ISong, ITempoSnapshot } from './interface.ts'
+
 export type ServerComm = {
   play_song: () => void
   request_queue_play_state: () => void
@@ -9,9 +12,42 @@ export const connectAndCreateServerComm = (): ServerComm => {
     location.reload()
   })
   socket.addEventListener('message', event => {
-    console.log('New message received')
+    // console.log('New message received')
     // console.log(event)
-    console.log(event.data)
+
+    const message = event.data
+    if (typeof message === 'string') {
+      // console.log(message)
+
+      if (message.startsWith('SONG_STARTED:\n')) {
+        const json = message.substring(14)
+
+        // TODO: Validate first
+        const song: ISong = JSON.parse(json)
+
+        fireNewWebSocketMessage({
+          type: 'SongStarted',
+          song,
+        })
+      }
+
+      if (message.startsWith('SONG_PLAYING_UPDATE:\n')) {
+        const json = message.substring(21)
+
+        // TODO: Validate first
+        const tempoSnapshot: ITempoSnapshot = JSON.parse(json)
+
+        fireNewWebSocketMessage({
+          type: 'SongPlayingUpdate',
+          tempoSnapshot,
+        })
+      }
+
+      //
+    } else {
+      console.error('Not a string :(')
+      console.error(message)
+    }
   })
 
   return {

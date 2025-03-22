@@ -80,7 +80,7 @@ export const DialogPatchEditor: FC<{
     <>
       <VolcaDrumPatchEditor
         patch={patch}
-        setPatch={(newPatch) => {
+        setPatch={newPatch => {
           setPatch(newPatch)
           // AUTO-SAVE HERE!
           onApply(newPatch)
@@ -88,16 +88,14 @@ export const DialogPatchEditor: FC<{
       />
       <div>
         <button
-          className="btn-primary"
+          className='btn-primary'
           onClick={() => {
             onApply(patch)
           }}
         >
           Apply
         </button>
-        <button
-          className="btn-primary"
-          onClick={onClose}>
+        <button className='btn-primary' onClick={onClose}>
           Close
         </button>
       </div>

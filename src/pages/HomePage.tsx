@@ -9,6 +9,8 @@ import {
 import { CustomEventFnType } from '../events/event-builder.ts'
 import { parse_into_yaml } from '../lib/yaml_serializer.ts'
 import { DialogPatchEditor } from '../components/patch/DialogPatchEditor.tsx'
+import { Song } from '../components/song/Song.tsx'
+import { ISong, ITempoSnapshot } from '../remote/interface.ts'
 
 export default function HomePage() {
   return (
@@ -21,14 +23,26 @@ export default function HomePage() {
 const InnerPage: FC = () => {
   const { serverComm } = useServerCom()
 
-  const [isOpenPatchEditorDialog, setOpenPatchEditorDialog] = useState(true)
+  const [isOpenPatchEditorDialog, setOpenPatchEditorDialog] = useState(false)
+  const [song, setSong] = useState<undefined | ISong>(undefined)
+  const [tempoSnapshot, setTempoSnapshot] = useState<
+    undefined | ITempoSnapshot
+  >(undefined)
 
   useEffect(() => {
     const listener: CustomEventFnType<
       CustomEventTypeNewWebSocketMessage
     > = event => {
       // TODO: Manage New Web Socket Message
-      console.log(event)
+
+      if (event.detail.type === 'SongStarted') {
+        setSong(event.detail.song)
+      } else if (event.detail.type === 'SongPlayingUpdate') {
+        setTempoSnapshot(event.detail.tempoSnapshot)
+      } else {
+        console.log('Unknown Event Type')
+        console.log(event)
+      }
     }
     subscribeNewWebSocketMessage(listener)
     return () => {
@@ -37,38 +51,39 @@ const InnerPage: FC = () => {
   }, [])
 
   return (
-    <section className="p-8">
-      Home Page
-      <br />
-      <button
-        className="btn-primary"
-        onClick={() => {
-          serverComm.play_song()
-        }}
-      >
-        Play song now
-      </button>
-      <button
-        className="btn-primary"
-        onClick={() => {
-          serverComm.request_queue_play_state()
-        }}
-      >
-        Get Queue Play State
-      </button>
-      <button
-        className="btn-primary"
-        onClick={() => {
-          setOpenPatchEditorDialog(!isOpenPatchEditorDialog)
-        }}
-      >
-        {isOpenPatchEditorDialog ? (
-          <>Close Volca Drum Patch manager</>
-        ) : (
-          <>Open Volca Drum Patch manager</>
-        )}
-      </button>
-      <div className="mt-3">
+    <section className='p-8'>
+      <h1 className='text-2xl mb-3'>DiGi-Player</h1>
+      <div className='flex flex-wrap gap-2'>
+        <button
+          className='btn-primary'
+          onClick={() => {
+            serverComm.play_song()
+          }}
+        >
+          Play song now
+        </button>
+        <button
+          className='btn-primary'
+          onClick={() => {
+            serverComm.request_queue_play_state()
+          }}
+        >
+          Get Queue Play State
+        </button>
+        <button
+          className='btn-primary'
+          onClick={() => {
+            setOpenPatchEditorDialog(!isOpenPatchEditorDialog)
+          }}
+        >
+          {isOpenPatchEditorDialog ? (
+            <>Close Volca Drum Patch manager</>
+          ) : (
+            <>Open Volca Drum Patch manager</>
+          )}
+        </button>
+      </div>
+      <div className='mt-3'>
         {isOpenPatchEditorDialog && (
           <DialogPatchEditor
             onClose={() => {
@@ -88,6 +103,11 @@ const InnerPage: FC = () => {
           />
         )}
       </div>
+      {!!song && (
+        <div className='mt-3'>
+          <Song song={song} tempoSnapshot={tempoSnapshot} />
+        </div>
+      )}
     </section>
   )
 }
