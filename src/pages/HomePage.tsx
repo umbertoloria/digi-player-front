@@ -9,7 +9,7 @@ import {
 import { CustomEventFnType } from '../events/event-builder.ts'
 import { parse_into_yaml } from '../lib/yaml_serializer.ts'
 import { DialogPatchEditor } from '../components/patch/DialogPatchEditor.tsx'
-import { Song } from '../components/song/Song.tsx'
+import { SongPlayer } from '../components/song/Song.tsx'
 import { ISong, ITempoSnapshot } from '../remote/interface.ts'
 
 export default function HomePage() {
@@ -105,7 +105,10 @@ const InnerPage: FC = () => {
       </div>
       {!!song && (
         <div className='mt-3'>
-          <Song song={song} tempoSnapshot={tempoSnapshot} />
+          {/*<Song song={song} isPlayer tempoSnapshot={tempoSnapshot} />*/}
+          {!!song && !!tempoSnapshot && (
+            <SongPlayer song={song} tempoSnapshot={tempoSnapshot} />
+          )}
         </div>
       )}
     </section>

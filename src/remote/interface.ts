@@ -14,6 +14,7 @@ export type ISong = {
   sections: ISongSection[]
 }
 export type ISongSection = {
+  id: number
   kind: string
   bars: number
   first_bar_num: number

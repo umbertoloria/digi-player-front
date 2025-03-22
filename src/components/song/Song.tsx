@@ -28,10 +28,64 @@ export const Song: FC<{
     </>
   )
 }
+export const SongPlayer: FC<{
+  song: ISong
+  tempoSnapshot: ITempoSnapshot
+}> = ({ song, tempoSnapshot }) => {
+  const curr_section = get_current_song_section(song, tempoSnapshot)
+  const prev_section = curr_section
+    ? song.sections.find(section => section.id === curr_section.id - 1)
+    : undefined
+  const next_section = curr_section
+    ? song.sections.find(section => section.id === curr_section.id + 1)
+    : undefined
+  return (
+    <>
+      {/*<pre>{JSON.stringify(song, null, 2)}</pre>*/}
+
+      <span className='text-xl'>{`${song.author} - ${song.title}`}</span>
+      <span className='ml-2 inline-block text-center px-2 text-md font-bold rounded border-gray-600 border-2'>
+        {song.tempo.bpm}
+      </span>
+      <div>
+        {!!prev_section && (
+          <SongSection section={prev_section} tempoSnapshot={tempoSnapshot} />
+        )}
+        {!!curr_section && (
+          <SongSection
+            section={curr_section}
+            isCurrent
+            tempoSnapshot={tempoSnapshot}
+          />
+        )}
+        {!!next_section && (
+          <SongSection section={next_section} tempoSnapshot={tempoSnapshot} />
+        )}
+      </div>
+    </>
+  )
+}
+
+function get_current_song_section(song: ISong, tempoSnapshot: ITempoSnapshot) {
+  return song.sections.find(section =>
+    is_song_section_current(section, tempoSnapshot)
+  )
+}
+
+function is_song_section_current(
+  section: ISongSection,
+  tempoSnapshot: ITempoSnapshot
+) {
+  return (
+    section.first_bar_num <= tempoSnapshot.cur_bar &&
+    tempoSnapshot.cur_bar <= section.first_bar_num + section.bars - 1
+  )
+}
 
 const SongSection: FC<{
   section: ISongSection
   tempoSnapshot: undefined | ITempoSnapshot
+  isCurrent?: boolean
 }> = ({ section, tempoSnapshot }) => {
   return (
     <div className='song-section'>
