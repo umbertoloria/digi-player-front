@@ -25,6 +25,9 @@
     .song-section-bar-content {
         @apply flex
     }
+    .song-section-bar-footer {
+        @apply h-6
+    }
     /*.song-section-bar.is-first .song-section-bar-content {}*/
     /*.song-section-bar.is-last .song-section-bar-content {}*/
     .song-section-bar-subdivision {
@@ -45,5 +48,10 @@
     }
     .song-section-bar-subdivision-116.is-current {
         @apply bg-violet-500
+    }
+    .comment {
+        position: absolute;
+        top: 100%;
+        @apply h-6 bg-lime-200
     }
 }

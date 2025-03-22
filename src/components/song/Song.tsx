@@ -1,7 +1,12 @@
 import { FC } from 'react'
 import { create_array_of_zeros } from '../../lib/utils.ts'
 import classNames from 'classnames'
-import { ISong, ISongSection, ITempoSnapshot } from '../../remote/interface.ts'
+import {
+  ISong,
+  ISongSection,
+  ISongSectionChordChange,
+  ITempoSnapshot,
+} from '../../remote/interface.ts'
 
 export const Song: FC<{
   song: ISong
@@ -101,6 +106,7 @@ const SongSection: FC<{
               bar_id={section.first_bar_num + index}
               time_signature_top={section.time_signature_top}
               time_signature_down={section.time_signature_down}
+              chord_changes_in_time={section.chord_changes_in_time}
               tempoSnapshot={tempoSnapshot}
             />
           </div>
@@ -116,6 +122,7 @@ const SongSectionBar: FC<{
   bar_id: number
   time_signature_top: number
   time_signature_down: number
+  chord_changes_in_time: ISongSectionChordChange[]
   tempoSnapshot: undefined | ITempoSnapshot
 }> = ({
   is_first,
@@ -123,6 +130,7 @@ const SongSectionBar: FC<{
   bar_id,
   time_signature_top,
   time_signature_down,
+  chord_changes_in_time,
   tempoSnapshot,
 }) => {
   const is_current_bar = tempoSnapshot?.cur_bar === bar_id
@@ -140,11 +148,15 @@ const SongSectionBar: FC<{
             <SongSectionBarSub
               time_signature_down={time_signature_down}
               is_current_bar={is_current_bar}
-              i_subdivision={index + 1}
+              i_quarter={index + 1}
+              chord_changes_in_time={chord_changes_in_time}
               tempoSnapshot={tempoSnapshot}
             />
           </div>
         ))}
+      </div>
+      <div className='song-section-bar-footer'>
+        {/* Saving space for Comments below... */}
       </div>
     </div>
   )
@@ -154,26 +166,29 @@ const SongSectionBar: FC<{
 const SongSectionBarSub: FC<{
   time_signature_down: number // As a "Subdivision Value".
   is_current_bar: boolean
-  i_subdivision: number // From 1.
+  i_quarter: number // From 1.
+  chord_changes_in_time: ISongSectionChordChange[]
   tempoSnapshot: undefined | ITempoSnapshot
-}> = ({ is_current_bar, i_subdivision, tempoSnapshot }) => {
+}> = ({ is_current_bar, i_quarter, chord_changes_in_time, tempoSnapshot }) => {
   const is_current =
     // TODO: Quarter or Subdivision?
-    is_current_bar && tempoSnapshot?.cur_quarter === i_subdivision
+    is_current_bar && tempoSnapshot?.cur_quarter === i_quarter
   return (
     <div
       className={classNames('song-section-bar-subdivision', {
         'is-current': is_current,
-        'is-first': i_subdivision === 1,
+        'is-first': i_quarter === 1,
       })}
     >
-      <div className='song-section-bar-subdivision-header'>{i_subdivision}</div>
+      <div className='song-section-bar-subdivision-header'>{i_quarter}</div>
       <div className='song-section-bar-subdivision-content'>
         {create_array_of_zeros(4).map((_, index) => (
           <div key={index}>
             <SongSectionBarSub116th
               is_current_sub={is_current}
+              i_quarter={i_quarter}
               i_1_16th={index + 1}
+              chord_changes_in_time={chord_changes_in_time}
               tempoSnapshot={tempoSnapshot}
             />
           </div>
@@ -186,20 +201,37 @@ const SongSectionBarSub: FC<{
 // This is usually for 1/16ths.
 const SongSectionBarSub116th: FC<{
   is_current_sub: boolean
+  i_quarter: number // From 1.
   i_1_16th: number // From 1.
+  chord_changes_in_time: ISongSectionChordChange[]
   tempoSnapshot: undefined | ITempoSnapshot
-}> = ({ is_current_sub, i_1_16th, tempoSnapshot }) => {
+}> = ({
+  is_current_sub,
+  i_quarter,
+  i_1_16th,
+  chord_changes_in_time,
+  tempoSnapshot,
+}) => {
   const is_current =
     // TODO: Quarter or Subdivision?
     is_current_sub && tempoSnapshot?.cur_1_16 === i_1_16th
+  // Assuming any Quarter always has four 1/16ths.
+  const overall_i_1_16th = (i_quarter - 1) * 4 + i_1_16th
+  const chord_change = chord_changes_in_time.find(
+    chord_change => chord_change.i_1_16th_start === overall_i_1_16th
+  )
+  const show_comment = chord_change ? chord_change.chord_name : undefined
   return (
-    <div
-      className={classNames('song-section-bar-subdivision-116', {
-        'is-current': is_current,
-        'is-first': i_1_16th === 1,
-      })}
-    >
-      {get_symbol_for_i_1_16th(i_1_16th)}
+    <div className='relative'>
+      <div
+        className={classNames('song-section-bar-subdivision-116', {
+          'is-current': is_current,
+          'is-first': i_1_16th === 1,
+        })}
+      >
+        {get_symbol_for_i_1_16th(i_1_16th)}
+      </div>
+      {!!show_comment && <div className='comment'>{show_comment}</div>}
     </div>
   )
 }

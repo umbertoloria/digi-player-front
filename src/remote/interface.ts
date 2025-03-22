@@ -1,6 +1,6 @@
 // API
-// v0.1
-// 2025-03-22T19:06:57Z
+// v0.2
+// 2025-03-22T20:46:14Z
 
 export type ISong = {
   id: string
@@ -20,6 +20,11 @@ export type ISongSection = {
   first_bar_num: number
   time_signature_top: number
   time_signature_down: number
+  chord_changes_in_time: ISongSectionChordChange[]
+}
+export type ISongSectionChordChange = {
+  i_1_16th_start: number
+  chord_name: string
 }
 export type ITempoSnapshot = {
   cur_bar: number
