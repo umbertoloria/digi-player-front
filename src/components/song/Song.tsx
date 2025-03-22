@@ -137,7 +137,7 @@ const SongSectionBar: FC<{
       <div className='song-section-bar-content'>
         {create_array_of_zeros(time_signature_top).map((_, index) => (
           <div key={index}>
-            <SongSectionBarSubdivision
+            <SongSectionBarSub
               time_signature_down={time_signature_down}
               is_current_bar={is_current_bar}
               i_subdivision={index + 1}
@@ -150,7 +150,8 @@ const SongSectionBar: FC<{
   )
 }
 
-const SongSectionBarSubdivision: FC<{
+// This is usually for Quarters.
+const SongSectionBarSub: FC<{
   time_signature_down: number // As a "Subdivision Value".
   is_current_bar: boolean
   i_subdivision: number // From 1.
@@ -166,7 +167,53 @@ const SongSectionBarSubdivision: FC<{
         'is-first': i_subdivision === 1,
       })}
     >
-      {i_subdivision}
+      <div className='song-section-bar-subdivision-header'>{i_subdivision}</div>
+      <div className='song-section-bar-subdivision-content'>
+        {create_array_of_zeros(4).map((_, index) => (
+          <div key={index}>
+            <SongSectionBarSub116th
+              is_current_sub={is_current}
+              i_1_16th={index + 1}
+              tempoSnapshot={tempoSnapshot}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   )
+}
+
+// This is usually for 1/16ths.
+const SongSectionBarSub116th: FC<{
+  is_current_sub: boolean
+  i_1_16th: number // From 1.
+  tempoSnapshot: undefined | ITempoSnapshot
+}> = ({ is_current_sub, i_1_16th, tempoSnapshot }) => {
+  const is_current =
+    // TODO: Quarter or Subdivision?
+    is_current_sub && tempoSnapshot?.cur_1_16 === i_1_16th
+  return (
+    <div
+      className={classNames('song-section-bar-subdivision-116', {
+        'is-current': is_current,
+        'is-first': i_1_16th === 1,
+      })}
+    >
+      {get_symbol_for_i_1_16th(i_1_16th)}
+    </div>
+  )
+}
+
+function get_symbol_for_i_1_16th(i_1_16th: number) {
+  if (i_1_16th === 1) {
+    return '1'
+  } else if (i_1_16th === 2) {
+    return "'"
+  } else if (i_1_16th === 3) {
+    return '&'
+  } else if (i_1_16th === 4) {
+    return "'"
+  }
+  // Should never happen.
+  return ' '
 }
